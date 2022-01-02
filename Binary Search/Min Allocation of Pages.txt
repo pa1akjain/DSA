@@ -1,0 +1,76 @@
+// Problem link - https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1
+
+#include <iostream>
+#include<algorithm>
+using namespace std; 
+
+    int sum(int A[], int n) {
+        int s = 0;
+        
+        for (int i = 0; i < n; i++) {
+            s+= A[i];
+        }
+        
+        return s;
+    }
+    
+    int maximum(int A[], int n) {
+        int mx = 0;
+        
+        for (int i = 0; i < n; i++) {
+            mx = max(A[i], mx);
+        }
+        
+        return mx;
+    }
+    
+    int getStudCount(int a[], int n, int maxPages) {
+         int stud = 1;
+         int currPages = 0;
+         for (int i = 0; i < n; i++) {
+            currPages += a[i];
+            if(currPages > maxPages) {
+                ++stud;
+                currPages = a[i];
+            }
+        }
+        
+        return stud;
+         
+    } 
+    
+    //Function to find minimum number of pages.
+    int findPages(int A[], int N, int M) 
+    {
+        
+        int min = maximum(A, N);
+        int max = sum(A, N);
+        int ans = -1;
+        
+        if(M > N) {
+            return ans;
+        }
+        
+        while(min <= max) {
+            int mid = (min + max) / 2;
+            
+            int studCount = getStudCount(A, N, mid);
+            if(studCount <= M) {
+                max = mid - 1;
+                if(studCount == M) 
+                    ans = mid;
+            }
+            else {
+                min = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+
+int main() {
+    int n = 8, m = 6;
+    int A[] = {250, 74, 159, 181, 23, 45, 129, 174};
+	cout<<findPages(A, n, m);
+	return 0;
+}
